@@ -27,7 +27,12 @@ python main.py
 data will be generated at root/work_dir/MCML_Jax/data
 
 
+### GPU Speed
+you can run same 100000000 photons at same time when using same layers
+run 100000000 photons at 3090ti average forwards 1600 times/sec
+
 ### TODO
 here still has cpu bottleneck, we need to figure it out
 - [ ] design data loader to maximize photons to gpu ram
 - [ ] use multiprocessing to load data
+
