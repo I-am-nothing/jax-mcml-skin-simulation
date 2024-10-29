@@ -12,12 +12,14 @@ class Grid:
         cl = 1
         output = jnp.zeros_like(self.i_rz)
         zt = self.zz
+        z_first = (layer.n[0] / self.dz).astype(jnp.int16)
+
         while zt > 0 and cl < layer.shape[0]-1:
             thickness = layer.z1[cl] - layer.z0[cl]
-            iz0 = (layer.z0[cl] / self.dz).astype(jnp.int16)
+            iz0 = (layer.z0[cl] / self.dz).astype(jnp.int16) - z_first
 
             if zt > thickness:
-                iz1 = (layer.z1[cl] / self.dz).astype(jnp.int16)
+                iz1 = (layer.z1[cl] / self.dz).astype(jnp.int16) - z_first
             else:
                 iz1 = -1
 

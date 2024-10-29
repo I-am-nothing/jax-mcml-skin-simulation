@@ -37,7 +37,6 @@ if __name__ == "__main__":
     gd_nr, gd_nz = config["grid_nr_nz"]
     shuffle = config["shuffle"]
     save_path = config["save_path"]
-    gd_save_z = config["grid_save_z"]
 
     if not os.path.isdir(f"{save_path}/bom"):
         os.makedirs(f"{save_path}/bom")
@@ -78,6 +77,6 @@ if __name__ == "__main__":
         output = np.array(output)
 
         bom.save(f"{save_path}/bom/{idx}_bom.npy")
-        np.save(f"{save_path}/aop/{idx}_aop.npy", output[:, gd_save_z, :])
+        np.save(f"{save_path}/aop/{idx}_aop.npy", output)
 
-        # plot(output)
+        plot(output)

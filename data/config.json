@@ -15,11 +15,10 @@
 
     "num_of_iop_layers_without_ambient": 3,
 
-    "grid_dr_dz": [0.05, 0.2],
-    "grid_nr_nz": [10, 10],
-    "grid_save_z": 5,
+    "grid_dr_dz": [0.05, 0.08],
+    "grid_nr_nz": [7, 7],
 
-    "chrom_permutation_path": "data/skin_perm.npy",
+    "chrom_permutation_path": "data/skin_perm_01.npy",
     "chrom_parameters": [[
         [0.0000, 0.0000, 1],
         [0.0000, 0.0000, 1],

@@ -155,9 +155,9 @@ class Kernel:
 
     @staticmethod
     @jax.jit
-    def _update_grid(dw, ph_xyz, ph_sct, gd_dr, gd_dz, gd_nr, gd_nz):
+    def _update_grid(dw, ph_xyz, ph_sct, gd_dr, gd_dz, gd_nr, gd_nz, ly_first_n):
         ir = (jnp.sqrt(ph_xyz[..., 0] ** 2 + ph_xyz[..., 1] ** 2) / gd_dr)
-        iz = (ph_xyz[..., 2] / gd_dz).astype(jnp.int16)
+        iz = (ph_xyz[..., 2] / gd_dz).astype(jnp.int16) - (ly_first_n / gd_dz).astype(jnp.int16)
         in_grid = jnp.logical_and(ph_sct != 0, jnp.logical_and(ir < gd_nr, iz < gd_nz))
 
         i_rz = jnp.zeros((*ph_xyz.shape[:-1], 2), dtype=jnp.int16)
@@ -212,7 +212,7 @@ class Kernel:
         )
 
         # out_grid
-        i_rz, _new_dw = Kernel._update_grid(d_w, ph_xyz, ph_sct, gd_dr, gd_dz, gd_nr, gd_nz)
+        i_rz, _new_dw = Kernel._update_grid(d_w, ph_xyz, ph_sct, gd_dr, gd_dz, gd_nr, gd_nz, ly_n[0])
         new_dw = jnp.where(
             jnp.logical_and(s_is_zero_2, jnp.logical_not(ph_dead)),
             _new_dw,
