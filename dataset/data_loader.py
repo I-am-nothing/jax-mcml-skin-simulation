@@ -3,7 +3,6 @@ import multiprocessing as mp
 import time
 
 import numpy as np
-from numba import njit
 from structure.layers import Layer
 from structure.photons import Photons
 

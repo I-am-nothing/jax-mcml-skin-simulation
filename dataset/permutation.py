@@ -1,3 +1,4 @@
+import shutil
 from functools import reduce
 
 import numpy as np
@@ -9,7 +10,7 @@ class PermutationDataset:
 
         self.float_dtype = np.float32 if config["fp_16"] is None or config["fp_16"] == False else np.float16
         self.cold_start = config["cold_start"]
-        self.file_path = config["chrom_permutation_path"]
+        self.file_dir = config["chrom_permutation_dir"]
 
         self.params = np.array(config["chrom_parameters"], dtype=self.float_dtype)
         self.params = self.params.reshape(-1, 3)
@@ -18,34 +19,35 @@ class PermutationDataset:
         self.step = (self.params[:, 1] - self.params[:, 0]) \
                     / np.where(self.params[:, 2] == 1, self.params[:, 2], self.params[:, 2] - 1.)
 
-        if os.path.isfile(self.file_path) and self.cold_start:
-            print("loading permutations... ", end="")
-            self.data = np.load(self.file_path)
-            print("DONE")
-            np.save("data/skin_perm_01.npy", self.data[:1000000])
-        else:
-            self.data = self.__generate_chrom_permutations()
+        self.total = reduce(lambda x, y: x * y, self.perms)
+
+        if not os.path.isdir(self.file_dir) or not self.cold_start:
+            if os.path.isdir(self.file_dir):
+                shutil.rmtree(self.file_dir)
+            os.makedirs(self.file_dir)
+            self.__generate_chrom_permutations()
 
     def __len__(self):
-        return len(self.data)
+        return self.total
 
     def __getitem__(self, index):
-        data = self.data[index]
+        data = np.load(os.path.join(self.file_dir, f"{index}.npy"))
 
         return data[0].item(), (data[1:].astype(self.float_dtype) * self.step + self.params[:, 0]).reshape(3, 8)
 
 
     def __generate_chrom_permutations(self):
         print("generating chrom permutations...")
-        total = reduce(lambda x, y: x * y, self.perms)
+
 
         perms = [i - 1 for i in self.perms]
-        tensor = np.zeros((total, len(perms) + 1), dtype=np.int64)
+        # tensor = np.zeros((total, len(perms) + 1), dtype=np.int64)
 
         count = 0
-        while count < total:
-            print("\rprocessing ", f"{count}/{total}", f"{count / total * 100:.2f}%", end='')
-            tensor[count] = np.array([count] + perms, dtype=np.int64)
+        while count < self.total:
+            print("\rprocessing ", f"{count}/{self.total}", f"{count / self.total * 100:.2f}%", end='')
+            np.save(os.path.join(self.file_dir, f"{count}.npy"), np.array([count] + perms, dtype=np.int64))
+
             xi = 1
             for i, num in enumerate(self.perms):
                 perms[i] = perms[i] - xi
@@ -56,10 +58,6 @@ class PermutationDataset:
                     break
             count += 1
 
-        print("\nsaving chrom permutations...")
-        np.save(self.file_path, tensor)
-
-        return tensor
 
 if __name__ == "__main__":
     config = {
