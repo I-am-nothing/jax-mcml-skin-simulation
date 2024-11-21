@@ -78,5 +78,6 @@ if __name__ == "__main__":
 
         bom.save(f"{save_path}/bom/{idx}_bom.npy")
         np.save(f"{save_path}/aop/{idx}_aop.npy", output)
-
-        plot(output)
+	
+        # print()
+        # plot(output)

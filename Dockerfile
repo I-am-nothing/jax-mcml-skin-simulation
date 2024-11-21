@@ -10,8 +10,14 @@ RUN apt-get update && apt-get install -y openssh-server && \
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+
 # Expose the SSH port
 EXPOSE 22
 
 # Start SSH service
 CMD ["/usr/sbin/sshd", "-D"]
+
+WORKDIR /root/work_dir/MCML_Jax
+

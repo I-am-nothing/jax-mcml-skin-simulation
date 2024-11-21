@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  jax-container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    runtime: nvidia
+    ipc: host
+    ports:
+      - "2222:22"
+    volumes:
+      - .:/root/work_dir/MCML_Jax
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      stack: 67108864

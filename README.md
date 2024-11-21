@@ -9,11 +9,7 @@ MCML (Monte Carlo Multi-Layered) on skin simulation using JAX
 ### Quick Start
 using docker
 ```bash
-docker build -t jax24.04-py3-ssh .
-```
-start container
-```bash
-docker run --privileged --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -p 2222:22 -v .:/root/work_dir/MCML_Jax -d jax24.04-py3-ssh
+docker-compose up -d
 ```
 
 right now you can use Jetbrains Gateway and select pycharm IDE to connect your container
