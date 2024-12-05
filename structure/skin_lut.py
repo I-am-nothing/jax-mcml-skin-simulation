@@ -1,4 +1,5 @@
 import numpy as np
+from tensorstore import dtype
 
 import utils
 
@@ -14,7 +15,7 @@ class SkinLUT:
             values = np.array(list(skin_lut[i].values()), dtype=float_dtype)
             wavelengths = np.array(list(skin_lut[i].keys()), dtype=float_dtype)
             target_wavelengths = np.linspace(spectrum[0], spectrum[1], spectrum[2])
-            skin_lut[i] = utils.linear_interpolation(values, wavelengths, target_wavelengths, dtype=float_dtype)
+            skin_lut[i] = utils.linear_interpolation(values, wavelengths, target_wavelengths, dtype=dtype)
 
         keys = list(skin_lut.keys())
         data = np.stack([skin_lut[k] for k in keys])
