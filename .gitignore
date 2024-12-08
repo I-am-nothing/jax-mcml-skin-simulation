@@ -2,3 +2,5 @@
 __pycache__
 output
 data/skin_perm
+
+.DS_Store

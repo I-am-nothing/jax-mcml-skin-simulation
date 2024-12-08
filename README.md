@@ -4,6 +4,7 @@ MCML (Monte Carlo Multi-Layered) on skin simulation using JAX
 ### Requirements
 * Cuda 12.4
 * GPU RAM > 12GiB
+* Docker
 
 ### Quick Start
 using docker
